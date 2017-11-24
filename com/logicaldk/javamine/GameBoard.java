@@ -9,7 +9,7 @@ import com.logicaldk.enums.*;
 
 /**
  * Minesweeper board for cs305 project
- * @author Walter Seme
+ * @author Dhanendra Kumar
  *
  */
 public class GameBoard implements MinesweeperBoard {

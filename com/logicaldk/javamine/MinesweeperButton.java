@@ -3,17 +3,29 @@ package com.logicaldk.javamine;
 import java.awt.Color;
 
 import javax.swing.JButton;
+import java.awt.event.*;
 
 import com.logicaldk.*;
 
+/*
+ * @author Dhanendra Kumar
+ */
+
 @SuppressWarnings("serial")//suppresses warning
-public class MinesweeperButton extends JButton{
+public class MinesweeperButton extends JButton implements ActionListener {
 	
 	private MinesweeperTile tile;
+	private MinesweeperBoard board;
+	int x;
+	int y;
 	
-	public MinesweeperButton(MinesweeperTile t, String name) {
+	public MinesweeperButton(MinesweeperBoard b, int x, int y, String name) {
 		super(name);
-		this.tile = t;
+		this.board = b;
+		this.tile = b.getTile(x, y);
+		this.addActionListener(this);
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void updateTile(MinesweeperTile t){
@@ -52,5 +64,12 @@ public class MinesweeperButton extends JButton{
 		return this.tile;
 	}
 
-	
+	/**
+	 * Handles all actions on the GUI.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("Driver: " + e.getSource());
+		board.clickTile(x,y);
+	}
 }

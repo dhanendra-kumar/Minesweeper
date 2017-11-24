@@ -8,7 +8,7 @@ import com.logicaldk.enums.*;
 
 /**
  * Logic for the minesweeper Project.
- * @author Larry
+ * @author Dhanendra Kumar
  *
  */
 public class LogicModel {

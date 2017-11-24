@@ -1,7 +1,7 @@
 package com.logicaldk.enums;
 /**
  * A state a tile may be in. 
- * 
+ * @author Dhanendra Kumar
  */
 public enum TileState {
 	/**

@@ -7,7 +7,7 @@ import com.logicaldk.enums.*;
 
 /**
  * 
- * @author Walter
+ * @author Dhanendra Kumar
  *
  */
 public class GameTile implements MinesweeperTile {
@@ -23,7 +23,7 @@ public class GameTile implements MinesweeperTile {
 	
 	void setSurroundingTiles(ArrayList<GameTile> neighborTiles){
 		
-		Object[] tmp =neighborTiles.toArray();
+		Object[] tmp = neighborTiles.toArray();
 		surroundingTiles = new GameTile[tmp.length];
 		int i = 0;
 		for(Object o : tmp){

@@ -19,21 +19,23 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import com.logicaldk.*;
+import com.logicaldk.enums.*;
 import com.logicaldk.javamine.GameBoard;
 import com.logicaldk.model.LogicModel;
 import com.logicaldk.winmine.WinMineBoard;
 
 /**
  * Main driver for the minesweeper project.
- * @author Larry Brewer
+ * @author Dhanendra Kumar
  *
  */
-public class Driver extends JFrame implements ActionListener{
+public class Driver extends JFrame implements ActionListener {
 	/*
 	 * Graphical User Interface Components.
 	 */
 	private JButton start;
 	private JRadioButton winMine, walterMine;
+	private JRadioButton beginner, intermediate, advance;
 	private ButtonGroup mineGroup;
 	private JMenuBar menuBar;
 	private JMenu optionsMenu;
@@ -51,8 +53,8 @@ public class Driver extends JFrame implements ActionListener{
 	/*
 	 * Settings Variables.
 	 */
-	private int rows = 9;
-	private int columns = 9;
+	private int rows = 8;
+	private int columns = 8;
 	private int bomb = 10;
 	private int loop = 1;
 	private LogicModel lm = new LogicModel();
@@ -65,7 +67,6 @@ public class Driver extends JFrame implements ActionListener{
 	 */
 	public Driver(){
 		initializeGuiComponents();
-		initializeOptionsMenu();
 		addComponentsToFrameAndDisplay();
 		lm.setBoard(mb);
 	}
@@ -79,71 +80,36 @@ public class Driver extends JFrame implements ActionListener{
 		start = new JButton("Start");
 		start.addActionListener(this);
 
-		optionPanel = new JPanel(new GridLayout(2,1));
+		optionPanel = new JPanel(new GridLayout(3,1));
 		mineGroup = new ButtonGroup();
 
-		winMine = new JRadioButton("Windows Minesweeper");
-		mineGroup.add(winMine);
-		optionPanel.add(winMine);
-		winMine.addActionListener(this);
+		beginner = new JRadioButton("Beginner");
+		beginner.setSelected(true);
+		intermediate = new JRadioButton("Intermediate");
+		advance = new JRadioButton("Advance");
 
-		walterMine = new JRadioButton("Walter's Minesweeper");
-		mineGroup.add(walterMine);
-		optionPanel.add(walterMine);
+		mineGroup.add(beginner);
+		mineGroup.add(intermediate);
+		mineGroup.add(advance);
+
+		beginner.addActionListener(this);
+		intermediate.addActionListener(this);
+		advance.addActionListener(this);
+
+		optionPanel.add(beginner);
+		optionPanel.add(intermediate);
+		optionPanel.add(advance);
+
 		northPanel.add(optionPanel);
-		walterMine.addActionListener(this);
-		walterMine.setSelected(true);
-
-		infoPanel = new JPanel(new GridLayout(4,2));
-
-		gamesLabel = new JLabel("Number of Games");
-		games = new JLabel(numGames + "");
-		infoPanel.add(gamesLabel);
-		infoPanel.add(games);
-
-		winsLabel = new JLabel("Number of Wins");
-		wins = new JLabel(numWins + "");
-		infoPanel.add(winsLabel);
-		infoPanel.add(wins);
-
-		lossLabel = new JLabel("Number of losses");
-		loss = new JLabel(numLosses + "");
-		infoPanel.add(lossLabel);
-		infoPanel.add(loss);
-
-		winPercentageLabel = new JLabel("Win Percentage");
-		winPercentage = new JLabel(numWinPercentage + "");
-		infoPanel.add(winPercentageLabel);
-		infoPanel.add(winPercentage);
-
-		northPanel.add(infoPanel);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-	}
-
-	/**
-	 * Initializes the Options Menu.
-	 */
-	private void initializeOptionsMenu() {
-		menuBar = new JMenuBar();
-		optionsMenu = new JMenu("Options");
-		
-		waltersDefaults = new JMenuItem("Walter's Minesweeper Options");
-		waltersDefaults.addActionListener(this);
-		optionsMenu.add(waltersDefaults);
-
-		loopAndDelayOptions= new JMenuItem("Loop/Delay Options");
-		loopAndDelayOptions.addActionListener(this);
-		optionsMenu.add(loopAndDelayOptions);
-		
-		menuBar.add(optionsMenu);
 	}
 
 	/**
 	 * Organizes the components in the frame, adds components and then displays.
 	 */
 	private void addComponentsToFrameAndDisplay() {
-		setJMenuBar(menuBar);
+		// setJMenuBar(menuBar);
 		setLayout(new GridLayout(2,1));
 		add(northPanel);
 		add(start);
@@ -169,51 +135,49 @@ public class Driver extends JFrame implements ActionListener{
 		 * Which Minesweeper is played depends on the current options
 		 * set in the GUI. 
 		 */
-		if (e.getSource().equals(start)){
+		System.out.println("Driver: " + e.getSource());
+		if (e.getSource().equals(start)) {
 	
-			for(int i = 0; i < loop; i ++){
-				if (hasBeenPlayed)
+			for (int i = 0; i < loop; i++) {
+				if (hasBeenPlayed) {
 					mb.resetBoard();
+				}
+				if ( mb.getGameState() == GameState.Lost  || mb.getGameState() == GameState.Won) {
+					mb = new GameBoard(rows,columns,bomb);
+					lm.setBoard(mb);
+					hasChangedBoardType = true;
+				}
 				if(hasChangedBoardType){
 					mb.displayBoard();
 					hasChangedBoardType = false;
 				}
-				if (lm.play())
-					numWins++;
-				else
-					numLosses++;
-				numGames++;
-				calculatePercentageAndSetLabels();
 				hasBeenPlayed = true;
 			}
-
-		}else if (e.getSource() instanceof JRadioButton){
+		} else if (e.getSource() instanceof JRadioButton) {
+			System.out.println("e.getSource(): " + e.getSource());
 			/*
 			 * If one of the radio buttons are clicked, this is called.
 			 * The Radio Buttons change which Minesweeper is run.
 			 */
-			if (e.getSource().equals(winMine)){
-			if(!(mb instanceof WinMineBoard) ){
-				mb = new WinMineBoard();
+			if(e.getSource().equals(beginner)) {
+				rows = 8;
+				columns = 8;
+				bomb = 10;
+			} else if(e.getSource().equals(intermediate)) {
+				rows = 16;
+				columns = 16;
+				bomb = 36;
+			} else if(e.getSource().equals(advance)) {
+				rows = 24;
+				columns = 24;
+				bomb = 91;
 			}
-			}else{
-				if(!(mb instanceof GameBoard)){
-				mb = new GameBoard(rows,columns,bomb);
-				}
-			}
+			mb = new GameBoard(rows,columns,bomb);
 			lm.setBoard(mb);
 			hasChangedBoardType = true;
 			hasBeenPlayed = false;
-
-		}else if (e.getSource() instanceof JMenuItem){
-			if(e.getSource().equals(waltersDefaults)){
-				new WalterOptions();
-			}else{
-				new LoopOptions();
-			}
 		}
 	}
-
 	
 	private void calculatePercentageAndSetLabels() {
 		wins.setText(numWins + "");
@@ -222,126 +186,4 @@ public class Driver extends JFrame implements ActionListener{
 		DecimalFormat df = new DecimalFormat("0.##");
 		winPercentage.setText(df.format(((double) numWins )/numGames * 100));
 	}
-
-
-	/**
-	 * Walters GUI options.
-	 *
-	 */
-	private class WalterOptions extends JDialog implements ActionListener{
-		JLabel bombLabel, rowLabel, colLabel;
-		JTextField bomb, row, col;
-		JButton ok, cancel;
-		
-		public WalterOptions(){
-			initializeComponents();
-			addToFrame();
-			pack();
-			setVisible(true);
-		}
-		private void initializeComponents(){
-			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			
-			bombLabel = new JLabel("Number of Bombs");
-			bomb = new JTextField(Driver.this.bomb + "");
-			
-			rowLabel = new JLabel("Number of Rows");
-			row = new JTextField(Driver.this.rows + "");
-			
-			colLabel = new JLabel("Number of Columns");
-			col = new JTextField(Driver.this.columns + "");
-			
-			ok = new JButton("OK");
-			ok.addActionListener(this);
-			
-			cancel = new JButton("Cancel");
-			cancel.addActionListener(this);
-		}
-		private void addToFrame() {
-			setLayout(new GridLayout(4,2));
-			add(bombLabel);
-			add(bomb);
-			add(rowLabel);
-			add(row);
-			add(colLabel);
-			add(col);
-			add(ok);
-			add(cancel);
-		}
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource().equals(ok)){
-				int tempBomb;
-				int tempRows;
-				int tempCols;
-				try{
-					tempBomb = Integer.parseInt(bomb.getText());
-					tempRows = Integer.parseInt(row.getText());
-					tempCols = Integer.parseInt(col.getText());
-				}catch (NumberFormatException nfe){
-					JOptionPane.showMessageDialog(this, "Please enter only numbers");
-					return;
-				}
-				Driver.this.bomb = tempBomb;
-				Driver.this.rows = tempRows;
-				Driver.this.columns = tempCols;
-				mb = new GameBoard(Driver.this.rows, Driver.this.columns, Driver.this.bomb);
-				lm.setBoard(mb);
-			}else if(e.getSource().equals(cancel)){
-			}
-			dispose();
-		}
-	}
-
-	/**
- * Loop and delay options.
- *
- */
-public class LoopOptions extends JDialog implements ActionListener {
-	JLabel loopLabel;
-	JTextField loop;
-	JButton ok, cancel;
-	
-	public LoopOptions(){
-		initializeComponents();
-		addToFrame();
-		pack();
-		setVisible(true);
-	}
-	private void initializeComponents(){
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		
-		loopLabel = new JLabel("Number of times to loop");
-		loop = new JTextField(Driver.this.loop + "");
-		
-		ok = new JButton("OK");
-		ok.addActionListener(this);
-		
-		cancel = new JButton("Cancel");
-		cancel.addActionListener(this);
-	}
-	private void addToFrame() {
-		setLayout(new GridLayout(2,2));
-		add(loopLabel);
-		add(loop);
-
-		add(ok);
-		add(cancel);
-	}
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(ok)){
-			int tempLoop;
-			try{
-				tempLoop = Integer.parseInt(loop.getText());
-			}catch (NumberFormatException nfe){
-				JOptionPane.showMessageDialog(this, "Please enter only numbers");
-				return;
-			}
-			Driver.this.loop = tempLoop;
-		}else if(e.getSource().equals(cancel)){
-		}
-		dispose();
-	}
-}
 }

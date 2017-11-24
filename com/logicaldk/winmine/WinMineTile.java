@@ -10,7 +10,7 @@ import com.logicaldk.enums.*;
 
 /**
  * 
- * @author Michael Sergio
+ * @author Dhanendra Kumar
  *
  */
 public class WinMineTile implements MinesweeperTile {

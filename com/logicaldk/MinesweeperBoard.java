@@ -7,7 +7,7 @@ import com.logicaldk.enums.*;
 /**
  * A representation of a board in the game Minesweeper
  * 
- * @author Michael Sergio
+ * @author Dhanendra Kumar
  */
 public interface MinesweeperBoard {
 

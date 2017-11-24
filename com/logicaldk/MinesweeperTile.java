@@ -5,7 +5,7 @@ import com.logicaldk.enums.*;
 /**
  * A representation of a tile in the game Minesweeper
  * 
- * @author Michael Sergio
+ * @author Dhanendra Kumar
  */
 public interface MinesweeperTile {
 

@@ -2,6 +2,7 @@ package com.logicaldk.enums;
 
 /**
  * State of the Game
+ * @author Dhanendra Kumar
  */
 public enum GameState {
 	/**

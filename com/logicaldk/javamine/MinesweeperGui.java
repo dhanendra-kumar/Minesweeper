@@ -21,7 +21,7 @@ import com.logicaldk.enums.*;
 
 /**
  * Front end for the Minesweeper game board
- * @author Walter and Larry
+ * @author Dhanendra Kumar
  *
  */
 @SuppressWarnings("serial")//do not need, suppress it
@@ -90,7 +90,7 @@ public class MinesweeperGui  extends JFrame{
 			int y= i/columns;
 			int x = i%rows ;
 			
-			MinesweeperButton tile = new MinesweeperButton(this.gameBoard.getTile(x, y) ,"   ");
+			MinesweeperButton tile = new MinesweeperButton(this.gameBoard, x, y, "   ");
 		
 			//defaults for button
 			tile.setFocusable(false);
