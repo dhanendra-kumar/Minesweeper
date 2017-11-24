@@ -1,0 +1,5 @@
+Compile:
+mainDir$ javac -d target com/logicaldk/**/*.java
+
+Run:
+mainDir/target$ java com.logicaldk.gui.Driver
